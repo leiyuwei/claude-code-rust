@@ -1,4 +1,4 @@
-name: 发布 - 构建和发布新版本
+name: 自定义发布 - 构建和发布新版本
 
 on:
   workflow_dispatch:
@@ -22,14 +22,21 @@ jobs:
       
       - name: 构建 Release
         run: cargo build --release --target ${{ matrix.target }}
+      - name: 验证构建产物
+        run: |
+          echo "Checking for build artifacts..."
+          Get-ChildItem -Path "target/${{ matrix.target }}/release/" -Filter "*.exe" -ErrorAction Stop
+          Write-Host "Build artifact found successfully"
       
       - name: 上传资源到发布
         uses: softprops/action-gh-release@v1
-        with:
+    with:
           files: target/${{ matrix.target }}/release/claude_code_rs.exe
           tag_name: v${{ github.run_number }}
           token: ${{ secrets.GITHUB_TOKEN }}
           repository: leiyuwei/claude-code-rust
           name: 释放 ${{ matrix.os }}
-
-
+        env:
+          CARGO_HOME: C:\Users\runneradmin\.cargo
+          CARGO_INCREMENTAL: 0
+          CARGO_TERM_COLOR: always
