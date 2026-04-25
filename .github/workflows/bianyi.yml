@@ -2,11 +2,7 @@ name: 自定义发布 - 构建和发布新版本
 
 on:
   workflow_dispatch:
-    inputs:
-      target:
-        description: 'The target triple for rust build.'
-        required: true
-        default: x86_64-pc-windows-msvc
+
 
 
 jobs:
