@@ -25,10 +25,10 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       
       - name: 构建 Release
-        run: cargo build --release --target ${{ matrix.target }}
+        run: cargo build --release --target 1.0.0
       
       - name: 上传资源到发布
         uses: softprops/action-gh-release@v1
         with:
-          files: target/${{ matrix.target }}/release/${{ matrix.artifact }}
+          files: target/1.0.0/release/1.0.0
 
