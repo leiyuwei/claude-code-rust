@@ -1,9 +1,10 @@
 name: 发布 - 构建和发布新版本
 
 on:
-  push:
-    tags:
-      - 'v*'
+  # push:
+  #   tags:
+  #     - 'v*'
+  workflow_dispatch:
 
 jobs:
   build:
