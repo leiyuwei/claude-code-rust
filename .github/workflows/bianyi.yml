@@ -32,7 +32,7 @@ jobs:
       - name: 上传资源到发布
         uses: softprops/action-gh-release@v1
         with:
-          files: target/${{ matrix.target }}/release/claude_code_rs.exe
+          files: target/${{ matrix.target }}/release/*.exe
           tag_name: v${{ github.run_number }}
           token: ${{ secrets.GITHUB_TOKEN }}
           repository: leiyuwei/claude-code-rust
