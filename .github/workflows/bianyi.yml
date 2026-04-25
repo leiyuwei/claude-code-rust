@@ -1,8 +1,6 @@
 name: 自定义发布 - 构建和发布新版本
-
 on:
   workflow_dispatch:
-
 jobs:
   build-and-release:
     name: 构建和发布 ${{ matrix.os }}
@@ -11,7 +9,7 @@ jobs:
       matrix:
         os: [windows-latest]
         target: x86_64-pc-windows-msvc
-
+        
     steps:
       - name: 获取代码仓库
         uses: actions/checkout@v4
