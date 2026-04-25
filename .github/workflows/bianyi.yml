@@ -1,10 +1,12 @@
 name: 自定义发布 - 构建和发布新版本
 
 on:
-  # push:
-  #   tags:
-  #     - 'v*'
   workflow_dispatch:
+    inputs:
+      target:
+        description: 'The target triple for rust build.'
+        required: true
+        default: x86_64-pc-windows-msvc
 
 jobs:
   build:
@@ -13,22 +15,24 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest]
-        include:
-          - os: windows-latest
-            target: x86_64-pc-windows-msvc
-            artifact: claude_code_rs.exe
-            asset_name: claude-code-rust-windows-x86_64.exe
-
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      
+      - name: 获取代码仓库
+        uses: actions/checkout@v4
+
+      - name: 设置 Rust 版本
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: ${{ matrix.target }}
+
       - name: 构建 Release
         run: cargo build --release --target ${{ matrix.target }}
-      
+
       - name: 上传资源到发布
         uses: softprops/action-gh-release@v1
         with:
           files: target/${{ matrix.target }}/release/${{ matrix.artifact }}
-
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          name: 释放 ${{ matrix.os }}
+          
