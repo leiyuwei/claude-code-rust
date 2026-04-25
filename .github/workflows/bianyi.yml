@@ -1,32 +1,28 @@
-name: 自定义发布 - 构建和发布新版本
+name: 发布 - 构建和发布新版本
 
 on:
   workflow_dispatch:
 
 jobs:
-  build-and-release:
-    name: 构建和发布 ${{ matrix.os }}
+  build:
+    name: 构建 ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [windows-latest]
-        target: x86_64-pc-windows-msvc
+        include:
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            artifact: claude_code_rs.exe
+            asset_name: claude-code-rust-windows-x86_64.exe
 
     steps:
-      - name: 获取代码仓库
-        uses: actions/checkout@v4
-
-      - name: 安装 Rust 工具链
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-
-      - name: 添加构建目标
-        run: rustup target add ${{ matrix.target }}
-
-      - name: 构建 Release 版本
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      
+      - name: 构建 Release
         run: cargo build --release --target ${{ matrix.target }}
-
+      
       - name: 上传资源到发布
         uses: softprops/action-gh-release@v1
         with:
@@ -35,7 +31,5 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           repository: leiyuwei/claude-code-rust
           name: 释放 ${{ matrix.os }}
-        env:
-          CARGO_HOME: C:\Users\runneradmin\.cargo
-          CARGO_INCREMENTAL: 0
-          CARGO_TERM_COLOR: always
+
+
