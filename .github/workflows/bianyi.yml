@@ -29,7 +29,7 @@ jobs:
 
       - name: 上传资源到发布
         uses: softprops/action-gh-release@v1
-        with:
+    with:
           files: target/${{ matrix.target }}/release/claude_code_rs.exe
           tag_name: v${{ github.run_number }}  # 可以换为实际版本号生成方法
           token: ${{ secrets.GITHUB_TOKEN }}
